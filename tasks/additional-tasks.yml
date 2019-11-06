@@ -1,0 +1,133 @@
+---
+# Title: app-greenshot
+#
+# Author: Luc Rutten
+# File: defaults/additional-tasks.yml
+#
+# Description:
+#   Section for additional tasks
+#
+# Sources:
+#   - https://www.wintips.org/how-to-disable-automatic-update-in-adobe-reader-dc/
+#   - https://www.adobe.com/devnet-docs/acrobatetk/tools/PrefRef/Windows/FeatureLockdown.html
+#   - https://getadmx.com/?Category=AdobeReader&Policy=Adobe.ReaderDC.Policies::Policy_Accept_EULA_69
+#   - https://community.adobe.com/t5/Enterprise-Teams/Please-help-me-to-suppress-the-following-Popup-which-states-quot/td-p/10124052
+#   - https://community.adobe.com/t5/Acrobat-Reader/Adobe-Reader-DC-disable-Protected-Mode-via-GPO/td-p/8152344
+#   - http://www.virtualbitconsulting.co.uk/2016/02/17/adobe-reader-optimization-for-citrix-or-rds-environments/
+
+- name: "Do not download or install updates automatically"
+  win_regedit:
+    path: HKLM:\SOFTWARE\WOW6432Node\Adobe\Adobe ARM\Products\{291AA914-A987-4CE9-BD63-AC0A92D435E5}
+    name: mode
+    data: 0
+    type: dword
+    state: present
+
+- name: "Restrict Updates (32bit)"
+  win_regedit:
+    path: HKLM:\Software\Policies\Adobe\Acrobat Reader\DC\FeatureLockdown\
+    name: bUpdater
+    data: 0
+    type: dword
+    state: present
+
+- name: "Restrict Updates (64bit)"
+  win_regedit:
+    path: HKLM:\Software\Wow6432Node\Policies\Adobe\Acrobat Reader\DC\FeatureLockdown\
+    name: bUpdater
+    data: 0
+    type: dword
+    state: present
+
+- name: "Disable Protected Mode (32bit)"
+  win_regedit:
+    path: HKLM:\SOFTWARE\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown
+    name: bProtectedMode
+    data: 0
+    type: dword
+    state: present
+
+- name: "Disable Protected Mode (64bit)"
+  win_regedit:
+    path: HKLM:\SOFTWARE\Wow6432Node\Policies\Adobe\Acrobat Reader\DC\FeatureLockDown
+    name: bProtectedMode
+    data: 0
+    type: dword
+    state: present
+
+- name: "Accept EULA"
+  win_regedit:
+    path: HKLM:\Software\Wow6432Node\Adobe\Adobe Acrobat\DC\Adobe\Viewer
+    name: EULAAcceptedForBrowser
+    data: 1
+    type: dword
+    state: present
+
+- name: "Specifies whether to show messages from Adobe when a document opens."
+  win_regedit:
+    path: HKLM:\SOFTWARE\WOW6432Node\Policies\Adobe\(product name)\(version)\FeatureLockdown\cIPM
+    name: bDontShowMsgWhenViewingDoc
+    data: 0
+    type: dword
+    state: present
+
+- name: "Specifies whether to show messages from Adobe when the product launches."
+  win_regedit:
+    path: HKLM:\SOFTWARE\WOW6432Node\Policies\Adobe\(product name)\(version)\FeatureLockdown\cIPM
+    name: bShowMsgAtLaunch
+    data: 0
+    type: dword
+    state: present
+
+- name: "Locks the features associated with bShowMsgAtLaunch and bDontShowMsgWhenViewingDoc so that ends users can't change the settings."
+  win_regedit:
+    path: HKLM:\SOFTWARE\WOW6432Node\Policies\Adobe\(product name)\(version)\FeatureLockdown\cIPM
+    name: bAllowUserToChangeMsgPrefs
+    data: 0
+    type: dword
+    state: present
+
+- name: "Prevent Repair of Adobe Reader Installation"
+  win_regedit:
+    path: HKLM:\SOFTWARE\WOW6432Node\Adobe\Acrobat Reader\DC\Installer
+    name: DisableMaintenance
+    data: 1
+    type: dword
+    state: present
+
+- name: "Remove Digital Editions"
+  win_regedit:
+    path: HKLM:\Software\Policies\Adobe\Acrobat Reader\DC\FeatureLockdown
+    name: bShowEbookMenu
+    data: 0
+    type: dword
+    state: present
+
+- name: "Remove Option to Improve Program Options"
+  win_regedit:
+    path: HKLM:\Software\Policies\Adobe\Acrobat Reader\DC\FeatureLockdown\
+    name: bUsageMeasurement
+    data: 0
+    type: dword
+    state: present
+
+- name: "Remove Option to Purchase Adobe Acrobat"
+  win_regedit:
+    path: HKCU:\Software\Adobe\Acrobat Reader\DC\AutoSaveDocs
+    name: bAutoSaveDocsEnabled
+    data: 0
+    type: dword
+    state: present
+
+- name: "Disable automatic saving of PDF changes for new users"
+  win_regedit:
+    path: HKCU:\Software\Adobe\Acrobat Reader\DC\AutoSaveDocs
+    name: bAutoSaveDocsEnabled
+    data: 0
+    type: dword
+    hive: C:\Users\Default\NTUSER.dat
+    state: present
+
+- name: "Limit Adobe Operations at Login"
+  win_regedit:
+    path: HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Run\
